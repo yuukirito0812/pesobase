@@ -60,13 +60,14 @@
  }
  async function send(override,builtin=false){
   const text=String(override??el('assistantInput').value).trim().slice(0,4000);if(!text||thinking||!scope)return;
+  const requestState=structuredClone(state),requestOptions=C.queryOptions(requestState,text,options());
   recognition?.stop();el('assistantInput').value='';el('assistantError').textContent='';const ticket=++run,scopeAtStart=scope,history=messages.filter(m=>!m.error).slice(-8).map(m=>({role:m.role,text:C.redact(m.text)+(m.actions?.length?'\nDraft status: '+m.actions.map(a=>a.type+': '+(a.reviewed?'saved':'not saved')).join(', '):'')}));
   messages.push({id:uid(),role:'user',text});messages=messages.slice(-39);thinking=true;controller=new AbortController();const activeController=controller,timer=setTimeout(()=>activeController.abort(),55000);paint();
   try{
-   let result;if(live()&&!builtin){const context=C.buildContext(state,C.queryOptions(state,text,options()));const data=await api({mode:'chat',provider:connection.provider,model:connection.model,message:C.redact(text),history,context,consent:true},activeController.signal);result={...C.validateResponse(data,state,options()),provider:data.provider||'AI'};if(data.model&&connection)setConnection({...connection,model:data.model});}
-   else {await Promise.resolve();result=C.localReply(state,text,options());}
+   let result;if(live()&&!builtin){const context=C.buildContext(requestState,requestOptions);const data=await api({mode:'chat',provider:connection.provider,model:connection.model,message:C.redact(text),history,context,consent:true},activeController.signal);result={...C.validateResponse(data,requestState,requestOptions),provider:data.provider||'AI'};if(data.model&&connection)setConnection({...connection,model:data.model});}
+   else {await Promise.resolve();result=C.localReply(requestState,text,requestOptions);}
    if(ticket!==run||scopeAtStart!==scope)return;
-   const actions=(result.actions||[]).map(a=>({...a,expected:a.operation==='edit'||a.operation==='delete'||a.operation==='pay'?JSON.stringify(C.entity(state,a)):undefined}));
+   const actions=(result.actions||[]).map(a=>({...a,expected:a.operation==='edit'||a.operation==='delete'||a.operation==='pay'?JSON.stringify(C.entity(requestState,a)):undefined}));
    messages.push({id:uid(),role:'assistant',text:result.reply,actions,choices:result.choices,provider:result.provider});if(!opened)unread++;updateBadge();
   }catch(error){if(ticket!==run||scopeAtStart!==scope)return;messages.push({id:uid(),role:'assistant',text:activeController.signal.aborted?'The response timed out. Retry or use built-in tools.':error.message||'Connection failed. Try again.',error:true,retry:text});}
   finally{clearTimeout(timer);if(ticket===run){thinking=false;controller=null;paint();}}
