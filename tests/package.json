@@ -1,1 +1,2 @@
-{"name":"pesobase-interaction-tests","private":true,"scripts":{"test":"node --test interactions.test.cjs"},"devDependencies":{"jsdom":"26.1.0"}}
+{"name":"pesobase-interaction-tests","private":true,"scripts":{"test":"node --test *.test.cjs *.test.mjs"},"devDependencies":{"jsdom":"26.1.0"}}
+

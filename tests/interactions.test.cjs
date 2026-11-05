@@ -4,7 +4,9 @@ const fs=require('node:fs');
 const path=require('node:path');
 const {JSDOM,VirtualConsole}=require('jsdom');
 const root=path.resolve(__dirname,'..');
-const html=fs.readFileSync(fs.existsSync(path.join(root,'dist/index.html'))?path.join(root,'dist/index.html'):path.join(root,'index.html'),'utf8');
+let html=fs.readFileSync(fs.existsSync(path.join(root,'dist/index.html'))?path.join(root,'dist/index.html'):path.join(root,'index.html'),'utf8');
+const assetRoot=fs.existsSync(path.join(root,'dist'))?path.join(root,'dist'):root;
+html=html.replace(/<script src="(assistant(?:-core)?\.js)[^"]*"><\/script>/g,(_,file)=>'<script>'+fs.readFileSync(path.join(assetRoot,file),'utf8')+'</script>');
 async function fixture(t,storage={}){
  const errors=[],downloads=[]; const vc=new VirtualConsole();vc.on('jsdomError',e=>errors.push(e.message));
  const dom=new JSDOM(html,{url:'https://pesobase.test/',runScripts:'dangerously',pretendToBeVisual:true,virtualConsole:vc,beforeParse(w){w.scrollTo=()=>{};w.structuredClone=structuredClone;w.URL.createObjectURL=blob=>{downloads.push(blob);return 'blob:qa'};w.URL.revokeObjectURL=()=>{};w.HTMLAnchorElement.prototype.click=function(){};w.HTMLCanvasElement.prototype.getContext=()=>new Proxy({},{get:(o,k)=>o[k]||(()=>{}),set:(o,k,v)=>(o[k]=v,true)});w.fetch=async()=>{throw Error('Unexpected network access')};w.confirm=()=>{throw Error('Native confirmation should not be required')};for(const [k,v]of Object.entries(storage))w.localStorage.setItem(k,v)}});
@@ -82,3 +84,4 @@ test('permanent removal requires its own confirmation and only removes the recov
 test('unsupported custom-logo uploads are rejected while the wallet remains editable',async t=>{const a=await fixture(t);a.w.openAccount();const field=a.find('#customBankLogo');Object.defineProperty(field,'files',{value:[new a.w.File(['bad'],'wrong.svg',{type:'image/svg+xml'})]});field.dispatchEvent(new a.w.Event('change'));await Promise.resolve();assert.match(a.find('#toast').textContent,/PNG, JPG, or WebP/);a.submit('#premiumAccountForm',{name:'Custom wallet'});assert.equal(a.state().accounts.at(-1).logo,'')});
 
 test('toast remains hidden until needed and monthly preferences save',async t=>{const a=await fixture(t);assert.equal(a.w.getComputedStyle(a.find('#toast')).display,'none');a.w.notify('Saved');assert.equal(a.w.getComputedStyle(a.find('#toast')).display,'flex');a.w.openGlobalSettings();a.submit('#gsForm',{profileName:'Carl QA',dailyBudgetMode:'fixed'});assert.equal(a.state().settings.dailyBudgetMode,'fixed');assert.match(a.find('#greeting').textContent,/Carl QA/)});
+

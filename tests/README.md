@@ -10,3 +10,6 @@ npm test --prefix tests
 The suite loads the actual standalone HTML in jsdom and submits its real forms and button handlers. It tests the ledger, create/edit/delete/restore flows, saved device data, wallet transfers, custom transaction behaviors, categories, budgets, allocations, recurring bills, planners, themes, catalog controls, import/export, authentication error UI, and mocked optimistic cloud saves.
 
 No live financial records are used. Network access is mocked, so passing these tests does not prove delivery of signup emails or an authenticated end-to-end Supabase session. Browser checks should also cover rendered layout, keyboard access, file uploads, and the primary create/edit/delete/restore flow.
+
+
+The assistant suites load the shipped scripts and exercise proposal review/save, deletion confirmation, stale actions, multi-line entries, user scoping, session-key storage, stop/error/fallback controls, and mobile overlay logic. Relay tests cover authentication, allowed origins, body/schema limits, key isolation, both providers, model verification and burst limiting. Real provider calls are not made during tests.
