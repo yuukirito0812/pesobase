@@ -1,5 +1,5 @@
 // Authenticated, user-key relay. Never writes finance data or persists keys/prompts.
-const ORIGINS = new Set(['https://pesobase.vercel.app', 'https://pesobase-finance-plus-cvz.saltyberry128.chatgpt.site']);
+const ORIGINS = new Set(['https://pesobase.vercel.app', 'https://pesobase-finance-plus-cvz.earth-zabala-carlvin.chatgpt.site', 'https://pesobase-finance-plus-cvz.saltyberry128.chatgpt.site']);
 const TYPES = ['transaction','wallet','category','fund','bill','budget','debt','payment','transactionType'];
 const KINDS = ['Expense','Income','Transfer','Refund','Savings Contribution','Emergency Fund Contribution','Allowance Payment','Bill Payment','Adjustment','Fund Withdrawal'];
 const STRINGS = ['id','kind','name','description','merchant','category','accountId','destinationId','fundId','paymentMethod','frequency','date','nextDue','targetDate'];
