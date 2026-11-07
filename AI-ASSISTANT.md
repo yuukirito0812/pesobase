@@ -1,19 +1,47 @@
-# PESOBASE AI assistant
+# PESOBASE assistant
 
-Deploy index.html, assistant-core.js, assistant.js, and assistant.css together at the web root. The source of the deployed authenticated relay is in supabase/functions/pesobase-ai.
+## Connect or repair AI
 
+1. Sign in to PESOBASE and open **Assistant → AI settings**.
+2. Choose Gemini or Groq, enter your own provider key, accept the data-sharing scope, and select **Connect & verify**.
+3. For an existing connection, choose **Refresh & verify**. This keeps your key and discovers and tests available models. A model that stops working during chat is refreshed automatically.
 
+A model list alone does not prove that a key can generate a response. PESOBASE now tests alternatives instead of repeatedly selecting the same unavailable model. Quota, key-access and model errors have separate messages. Provider account limits still apply. Built-in summaries and expense entry work without a key, including in device mode.
 
-The right-hand assistant matches EstateFlow's dock, voice-input control, context selector, session history, and minimized launcher. It adapts to the four existing appearance themes. Built-in summaries and supported commands run without an API key. English expense shorthand can be entered on separate lines; open-ended English/Taglish interpretation requires a provider connection.
+## Add a list of expenses
 
-In a signed-in workspace, open **Assistant → AI settings**, select Gemini or Groq, enter a provider key, accept the displayed data-sharing scope, then choose **Connect & verify**. Verification discovers an available text model and requests a real response. Quotas and charges depend on the provider account; PESOBASE does not enable billing or provide a shared key. Device mode supports only built-in tools.
+Send a list using an existing wallet name:
 
-Each provider key is kept in sessionStorage for that tab and user, never in finance state, backups, GitHub, or server storage. Disconnect or sign out to remove it. Chats are scoped to the user and tab. Voice input uses the browser's speech service; dictated text is reviewed before sending.
+```text
+Add expenses from GCash:
+Lunch 150
+Coffee 75
+Transport 50
+```
 
-The authenticated Supabase Edge Function `pesobase-ai` relays requests to the selected provider. Its source is under `supabase/functions/pesobase-ai/`; the function validates a Supabase user session on each request, permits the listed production PESOBASE origins, limits request size, and applies best-effort per-isolate burst control. It does not write to the database. Provider quotas remain the durable rate limit. A different frontend domain needs an explicit origin added to the function and a redeployment. No database schema migration is needed.
+Use **Review all & add together** to check amounts, dates, wallets and categories, omit items, and save the list in one step. Up to 50 entries are supported. Use one total amount per line; an undated expense uses today. A shared date such as “yesterday” or `2026-11-07` can go in the header.
 
-The assistant sends calculated summaries and up to 40 transaction details for the selected period and wallet, up to 12 monthly summary rows, and bounded wallet/fund/bill/debt metadata. Profile, notes, card digits, logos and deleted items are excluded. Email addresses and long number strings are masked in descriptions and chat. Avoid typing secrets into chat; redaction cannot identify every sensitive phrase. Free-provider data terms apply.
+To save complete expense requests directly, turn on **Auto-add expenses** and choose a default expense wallet in AI settings. This preference starts off and is scoped to this tab and user. Unknown wallets, incomplete rows and likely duplicates pause for review. Exact simple lists are parsed on the device; a provider connection enables open-ended English/Taglish requests.
 
-Supported reviewed drafts cover transactions (including income, refunds, transfers and savings), wallet/category/fund/bill/debt creation and edits, category budgets, monthly targets, payment methods and transaction types. The existing forms perform validation and save. Removal opens existing confirmation/recovery flows. The model cannot execute code, silently save, send payments, or move money at a bank. Cards/images, theme, backup and planner settings remain available in their existing pages. Ambiguous or stale records require a fresh review. The draft is marked completed only after the form changes state.
+Each batch has **Undo this batch**. Undo moves its unchanged records to **Recently deleted**, where they can be restored. If any batch record has since changed, inspect it in Transactions before removing it.
 
-Validation: `npm ci --prefix tests && npm test --prefix tests`. The tests include original finance/catalog checks, 32 prior interaction regressions, assistant form flows and provider-relay security/error cases. Provider and cloud responses are mocked; these checks do not prove real-key model availability or live user sign-in. Desktop browser QA uses disposable device data. Microphone transcription depends on browser permissions and its speech service.
+## Use the microphone
+
+In **AI settings → Voice input**, choose:
+
+- **Browser dictation** for your browser's speech service. No provider key is required.
+- **AI recording** for transcription through your connected Gemini or Groq key. This needs separate audio-sharing consent.
+
+Tap the microphone, allow microphone access, speak, then tap again to finish. AI recordings stop after 60 seconds and upload only after recording stops. **Cancel voice** releases the microphone and discards pending transcription. The transcript appears in the message box; review it and press Send. Voice alone never saves records.
+
+If browser dictation fails, use **Try AI recording** or change the mode in AI settings. Permission errors explain which browser/device setting needs attention. Open PESOBASE directly over HTTPS if an embedded preview blocks microphone access.
+
+## Other supported actions
+
+Ask for summaries, balances, upcoming bills, or drafts to create/edit transactions, wallets, categories, funds, bills, budgets and debt plans. Transfers, edits, deletions and non-expense entries retain their review steps. The assistant updates PESOBASE records; it cannot send bank payments. Card images, themes, backup import and planner settings remain in their existing pages.
+
+## Privacy and verification
+
+Keys and chats stay in sessionStorage for the current tab/user and are excluded from finance backups. Disconnect or sign out to clear the key. Live chat shares the stated scoped finance context; recording transcription shares the audio without finance records. Provider data terms apply. Gemini requests use stateless mode where supported.
+
+Automated checks use the shipped code and real form handlers with mocked providers, cloud responses and microphone APIs. Real-key availability and physical microphone transcription still need verification in your browser. Final visual browser QA was blocked by the session's automatic approval review usage limit.

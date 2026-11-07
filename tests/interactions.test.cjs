@@ -6,7 +6,7 @@ const {JSDOM,VirtualConsole}=require('jsdom');
 const root=path.resolve(__dirname,'..');
 let html=fs.readFileSync(fs.existsSync(path.join(root,'dist/index.html'))?path.join(root,'dist/index.html'):path.join(root,'index.html'),'utf8');
 const assetRoot=fs.existsSync(path.join(root,'dist'))?path.join(root,'dist'):root;
-html=html.replace(/<script src="(assistant(?:-core)?\.js)[^"]*"><\/script>/g,(_,file)=>'<script>'+fs.readFileSync(path.join(assetRoot,file),'utf8')+'</script>');
+html=html.replace(/<script src="(assistant(?:-core|-voice)?\.js)[^"]*"><\/script>/g,(_,file)=>'<script>'+fs.readFileSync(path.join(assetRoot,file),'utf8')+'</script>');
 async function fixture(t,storage={}){
  const errors=[],downloads=[]; const vc=new VirtualConsole();vc.on('jsdomError',e=>errors.push(e.message));
  const dom=new JSDOM(html,{url:'https://pesobase.test/',runScripts:'dangerously',pretendToBeVisual:true,virtualConsole:vc,beforeParse(w){w.scrollTo=()=>{};w.structuredClone=structuredClone;w.URL.createObjectURL=blob=>{downloads.push(blob);return 'blob:qa'};w.URL.revokeObjectURL=()=>{};w.HTMLAnchorElement.prototype.click=function(){};w.HTMLCanvasElement.prototype.getContext=()=>new Proxy({},{get:(o,k)=>o[k]||(()=>{}),set:(o,k,v)=>(o[k]=v,true)});w.fetch=async()=>{throw Error('Unexpected network access')};w.confirm=()=>{throw Error('Native confirmation should not be required')};for(const [k,v]of Object.entries(storage))w.localStorage.setItem(k,v)}});
