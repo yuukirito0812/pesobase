@@ -1,0 +1,18 @@
+{
+  "id": "./",
+  "name": "PESOBASE — Your money workspace",
+  "short_name": "PESOBASE",
+  "description": "Track expenses, explore your money, and record entries offline.",
+  "start_url": "./?source=installed",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f7f5",
+  "theme_color": "#0f5b43",
+  "lang": "en-PH",
+  "icons": [
+    {"src":"icons/pesobase-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"icons/pesobase-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
+    {"src":"icons/pesobase-maskable.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
+  ],
+  "shortcuts": [{"name":"Add expense","short_name":"Add expense","url":"./?action=expense","icons":[{"src":"icons/pesobase-192.png","sizes":"192x192"}]}]
+}
