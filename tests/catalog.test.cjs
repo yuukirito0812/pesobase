@@ -6,7 +6,7 @@ const definitions=lines.filter(l=>/^(const BANK_PRESETS=|const BANK_LOGOS=|const
 vm.runInContext(definitions.join('\n'),ctx);const run=s=>vm.runInContext(s,ctx);
 assert.equal(run('Object.keys(BANK_LOGOS).length'),16);
 for(const data of Object.values(run('BANK_LOGOS'))){const b=Buffer.from(data.split(',')[1],'base64');assert.equal(b.subarray(1,4).toString(),'PNG');}
-assert.equal(run('CARD_DESIGNS.length'),8);
+assert.equal(run('CARD_DESIGNS.length'),12);
 run('renderCardCatalog()');assert.match(elements.catalogCount.textContent,/17 providers/);
 elements.catalogType.value='E-Wallet';run('renderCardCatalog()');assert.match(elements.catalogCount.textContent,/4 providers/);assert.match(elements.catalogCards.innerHTML,/GCash/);assert.doesNotMatch(elements.catalogCards.innerHTML,/Use BPI/);
 elements.catalogSearch.value='maya';run('renderCardCatalog()');assert.match(elements.catalogCount.textContent,/1 providers/);

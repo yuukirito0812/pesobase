@@ -1,4 +1,4 @@
-/* EstateFlow's dock and launcher, adapted to PESOBASE's theme tokens. */
+/* PESOBASE conversation, voice input and provider settings. */
 :root{--assistant-width:354px}
 .assistant-open .main{margin-right:var(--assistant-width);container-type:inline-size;container-name:money-workspace}
 .assistant-dock{position:fixed;inset:0 0 0 auto;width:var(--assistant-width);height:100dvh;z-index:65;display:flex;flex-direction:column;min-height:0;background:var(--surface);border-left:1px solid var(--line);color:var(--text)}
@@ -24,3 +24,30 @@
 .assistant-voice-actions{display:flex;gap:8px;flex-wrap:wrap}.assistant-voice-actions button{font-size:11px;border:1px solid var(--line);background:var(--surface2);padding:7px 10px;border-radius:7px;margin-top:8px}.assistant-voice-actions button[hidden]{display:none}.assistant-batch-summary{display:grid;gap:9px;margin-top:12px;padding:13px;background:var(--green3);border:1px solid var(--line);border-radius:12px}.assistant-batch-summary b{font-size:12px}.assistant-batch-summary button{font-size:11px;color:#fff}.assistant-batch-result{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px;padding:12px 0}.assistant-batch-result button{font-size:10px;padding:6px 8px}.assistant-settings h3{margin:23px 0 12px;font-size:15px}.assistant-settings .field{margin-top:13px}.assistant-settings .dialog-actions{flex-wrap:wrap}.assistant-settings #assistantConnectStatus{color:var(--green);font-size:12px;line-height:1.7;margin-top:10px}
 .dialog:has(.assistant-batch){max-width:920px}.assistant-batch-toolbar{display:flex;gap:10px;align-items:flex-end;margin:16px 0}.assistant-batch-toolbar label{display:grid;gap:7px;flex:1;font-size:12px}.assistant-batch-toolbar select{width:100%}.assistant-batch-rows{display:grid;gap:14px}.assistant-batch-row{border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;grid-template-columns:2fr 1fr 1.3fr;gap:12px;background:var(--surface2)}.assistant-batch-row legend{padding:0 6px;font-size:12px}.assistant-batch-row>label{display:grid;gap:6px;font-size:11px;color:var(--muted);min-width:0}.assistant-batch-row input,.assistant-batch-row select{width:100%;min-width:0;font-size:13px}.assistant-batch-row legend input{width:auto;accent-color:var(--green)}.assistant-batch-total{font-weight:700;font-size:16px;padding:15px 0;border-bottom:1px solid var(--line)}.assistant-batch .dialog-actions{position:sticky;bottom:-1px;background:var(--surface);padding:14px 0;margin-bottom:0;z-index:1}.assistant-consent[hidden]{display:none!important}
 @media(max-width:600px){.assistant-batch-row{grid-template-columns:1fr 1fr}.assistant-batch-row>label:first-of-type{grid-column:1/-1}.assistant-batch-row input,.assistant-batch-row select{font-size:16px}.assistant-auto-row{gap:5px}}
+
+/* Compact, movable conversation: the workspace stays usable behind it. */
+.assistant-open .main{margin-right:0;container-type:normal}
+#assistantBackdrop{display:none!important}
+.assistant-dock{inset:auto;border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:0 20px 65px #072c3533,0 3px 12px #072c351a;z-index:120;max-width:calc(100vw - 24px)}
+.assistant-heading{position:relative;height:68px;padding:12px 11px 0;gap:8px;background:linear-gradient(120deg,var(--green3),var(--surface))}
+.assistant-heading h2{font-size:13px;letter-spacing:.02em}.assistant-heading p{font-size:9px}
+.assistant-heading .assistant-icon{width:31px;height:34px;flex-shrink:0}
+.assistant-heading .assistant-icon-button{min-width:44px;min-height:44px;border-radius:13px}
+.assistant-drag-handle{position:absolute;top:0;left:calc(50% - 35px);width:70px;height:17px;display:grid;place-items:center;border:0;background:transparent;cursor:grab;touch-action:none;padding:0}
+.assistant-drag-handle span{width:31px;height:4px;border-radius:8px;background:var(--muted);opacity:.35}
+.assistant-drag-handle:active,.assistant-launcher.is-dragging{cursor:grabbing}
+.assistant-launcher{width:56px;height:56px;z-index:120;touch-action:none;cursor:grab;transition:box-shadow .2s}
+.assistant-launcher:hover{transform:none}.assistant-launcher:active{cursor:grabbing}
+.assistant-bubble-label{display:none}
+.assistant-context{position:absolute;z-index:3;top:67px;left:10px;right:10px;max-height:calc(100% - 80px);overflow:auto;border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 24px #06271e22;padding:15px;background:var(--surface)}
+.assistant-context[hidden]{display:none!important}.assistant-focus{margin-top:9px}.assistant-focus select{font-size:13px;height:40px}
+.assistant-auto-row{flex-wrap:wrap}.assistant-auto-row label,.assistant-auto-row button{min-height:36px;font-size:11px}
+.assistant-option-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.assistant-option-actions button{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:10px;background:var(--surface2);min-height:40px;padding:7px 10px;font-size:11px}
+.assistant-thread{padding:15px 14px}.assistant-message{padding-bottom:16px}.assistant-message.user{margin-bottom:16px}.assistant-message-text{line-height:1.65}
+.assistant-welcome{padding:7px 1px}.assistant-welcome-icon{width:35px;height:35px;border-radius:12px;margin-bottom:12px}.assistant-welcome-icon svg{width:19px;height:19px}.assistant-welcome h3{font-size:19px;letter-spacing:-.5px;max-width:240px}.assistant-welcome p{font-size:11px;line-height:1.6}
+.assistant-starters{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}.assistant-starters button{padding:9px;font-size:10px;border-radius:12px;min-height:38px}
+.assistant-bottom{padding:9px 10px 8px}.assistant-composer{display:flex;align-items:flex-end;border-radius:16px}.assistant-composer textarea{flex:1;min-width:0;min-height:44px;height:44px;max-height:92px;resize:none;padding:11px 9px;font-size:13px;line-height:1.5}
+.assistant-compose-tools{flex-shrink:0;gap:2px;padding:0 4px 0 0}.assistant-send,.assistant-mic{width:40px;height:44px;min-height:44px;border-radius:12px}.assistant-send{margin-bottom:0}.assistant-footnote{font-size:8px;margin-top:5px}
+.assistant-inline-error:empty,.assistant-voice-status:empty,.assistant-voice-actions:not(:has(button:not([hidden]))){display:none}
+@media(max-width:760px){.assistant-heading{height:64px}.assistant-context{top:63px}.assistant-composer textarea,.assistant-focus select{font-size:16px}.assistant-footnote{font-size:8px}}
+body:has(#modal.show) .assistant-launcher{visibility:hidden}

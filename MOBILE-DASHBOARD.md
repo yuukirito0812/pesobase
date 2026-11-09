@@ -30,10 +30,24 @@ Charts and budget rows open their exact source transactions. Calendar days with 
 
 Period comparison supports the previous month or the same month last year. **Same elapsed days** compares equal day counts for the current month, clamped to the shorter month's length; **Full months** uses each recorded month and may include an incomplete current month. Date ranges are always displayed. Expenses include bill and allowance payments, less refunds; transfers are excluded. Negative net spending represents net refunds.
 
+## Mobile wallets and search
+
+The wallet starts in Stack view: one card at a time at a physical bank-card ratio of 1.586:1. Swipe the card up/down, use the arrow buttons, or tap its name to choose another wallet. Tap the upward chevron to collapse the card into a balance row. Stack/Grid/List, selected wallet and collapse preferences persist in account state and backups. Grid uses two columns on most phones and one column on narrow screens for legibility.
+
+Expense, Income, Transfer and Activity controls below a card always use that wallet. The more button customizes it. Four new finishes—Holographic, Sunset, Botanical and Circuit—bring the total to twelve. The header offers balance privacy, the design catalog and Add wallet. Card artwork and wallet names do not imply bank connectivity.
+
+The home search lists only matching transactions, six per page, across all dates. Terms are combined; quoted phrases, exact peso amounts and ISO dates are supported. Incidental notes do not create matches. Tap a result for that transaction's details, or **Open matching transactions** for a ledger containing those matches with unrelated filters cleared. The ledger's additional filters are tucked behind **Filters**.
+
+## Floating assistant
+
+Tap the bubble for a compact conversation. Drag the bubble, or drag the handle at the top of the open panel, to reposition it; keyboard arrow keys also move either control. Positions stay on the device and remain within the visible viewport after resizing. Minimize preserves the conversation and unsent draft. Opening a workspace form minimizes chat so the form remains accessible.
+
+The options button contains wallet focus, AI mode, auto-add preference, New chat, AI settings and Reset bubble position. Microphone and Send stay beside the message field. The chat leaves the rest of the workspace interactive. Microphone permissions and speech/recording support depend on the actual phone/browser; no live microphone capture was performed in this release's browser checks.
+
 ## Deploy and validate
 
-Publish the entire static app directory: `index.html`, all `assistant*`, `workspace*` and `offline.js` assets, `sw.js`, `manifest.webmanifest`, and `icons/`. In the Sites checkout these are under `dist/`; in the GitHub/Vercel repository they are at the root. Preserve relative paths. No database migration or AI-relay change is needed for these additions.
+Publish the entire static app directory: `index.html`, all `assistant*`, `workspace*`, `mobile-ui*` and `offline.js` assets, `sw.js`, `manifest.webmanifest`, and `icons/`. In the Sites checkout these are under `dist/`; in the GitHub/Vercel repository they are at the root. Preserve relative paths. No database migration or AI-relay change is needed for these additions.
 
 Bump the service-worker cache version in `sw.js` whenever publishing changed shell assets in a later release. The worker caches only explicitly listed static files. API responses, authentication, AI requests, receipts and other origins are not cached by it; finance data remains in the existing per-device/per-account storage.
 
-Run `npm ci --prefix tests && npm test --prefix tests`. This release passes 130 automated checks. Browser QA covered desktop dashboard controls and a 390-pixel phone layout, including the receipt form. Live provider calls, private account sync, physical camera capture and phone installation were not exercised by these tests.
+Run `npm ci --prefix tests && npm test --prefix tests`. This release passes 143 automated checks. Browser QA covered 390-pixel and 320-pixel phone layouts, focused transaction search and details, wallet customization/actions, stacked and grid cards, collapse controls, and compact movable chat. Live provider calls, private account sync, physical camera capture and phone installation were not exercised by these tests.
