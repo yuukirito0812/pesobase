@@ -1,1 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0f5b43"/><path fill="#dbe9bd" fill-rule="evenodd" d="M19 48V18a2 2 0 0 1 2-2h12c9 0 14 4 14 11s-5 11-14 11h-6v10h-8Zm8-25v8h6c4 0 6-1.4 6-4s-2-4-6-4h-6Z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>PESOBASE</title>
+  <desc>A connected P with a gold coin arc and a folded-banknote base.</desc>
+  <rect width="64" height="64" rx="15" fill="#0f5b43"/>
+  <path fill="#f5f2d9" fill-rule="evenodd" d="M17 50V17l5-5h12c10 0 17 6 17 15s-7 15-17 15h-7v8H17Zm10-29v12h7c4.6 0 7-2.1 7-6s-2.4-6-7-6h-7Z"/>
+  <path fill="#e6bb68" d="M34 12c10 0 17 6 17 15H41c0-3.9-2.4-6-7-6v-9Z"/>
+  <path fill="#b7cf98" d="m17 50 10-10v10H17Z"/>
+</svg>

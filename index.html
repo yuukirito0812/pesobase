@@ -8,9 +8,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="PESOBASE">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/pesobase-p-180.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icons/pesobase-p-192.png">
-<link rel="icon" type="image/svg+xml" sizes="any" href="icons/pesobase.svg?v=20261113">
+<link rel="apple-touch-icon" href="icons/pesobase-ribbon-180.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/pesobase-ribbon-32.png">
+<link rel="icon" type="image/svg+xml" sizes="any" href="icons/pesobase.svg?v=20261114">
 <title>PESOBASE Premium — Your money workspace</title>
 <style>
 :root{--bg:#f4f7f5;--surface:#fff;--surface2:#edf3ef;--text:#16221c;--muted:#718078;--line:#dce6e1;--green:#0f5b43;--green2:#20815f;--green3:#ddf2e8;--red:#c64f52;--red3:#fdebec;--amber:#b57b1d;--amber3:#fff4dc;--blue:#477bb6;--blue3:#eaf2fb;--purple:#7b63b4;--shadow:0 8px 28px rgba(16,46,35,.06);--radius:16px}
@@ -78,7 +78,10 @@ body{letter-spacing:-.015em}button,a,input,select,textarea{-webkit-tap-highlight
 <button class="auth-appearance" type="button" onclick="openAppearance()" aria-label="Customize appearance">◐ <span>Appearance</span></button>
 <div class="auth-layout"><section class="auth-story" aria-label="Welcome to PESOBASE"><div class="story-kicker"><span></span> A LITTLE CLARITY. EVERY DAY.</div><h2>Make room<br>for your <em>next.</em></h2><p>From everyday spending to the things you’re saving for. Give every peso a place, and every plan a little perspective.</p><div class="story-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="story-card"><div class="story-card-top">PESOBASE <span>◈</span></div><div class="story-card-sub">YOUR MONEY, IN FOCUS</div><div class="story-card-amount">₱ •••,•••</div><div class="story-card-bottom">A little today. More tomorrow.<span>↗</span></div></div><div class="story-pill pill-save">◎ &nbsp; Build your future</div><div class="story-pill pill-plan">↗ &nbsp; Spend with intention</div></div><div class="story-bottom"><span>01 / TRACK</span><span>02 / PLAN</span><span>03 / GROW</span></div></section>
   <div class="auth-card">
-    <div class="auth-logo"><svg class="pb-symbol" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="currentColor"/><path fill="var(--logo-ink,#dbe9bd)" fill-rule="evenodd" d="M19 48V18a2 2 0 0 1 2-2h12c9 0 14 4 14 11s-5 11-14 11h-6v10h-8Zm8-25v8h6c4 0 6-1.4 6-4s-2-4-6-4h-6Z"/></svg><span>PESOBASE<small>PERSONAL FINANCE, REFINED.</small></span></div>
+    <div class="auth-logo"><svg class="pb-symbol" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#0f5b43"/>
+  <path fill="#f5f2d9" fill-rule="evenodd" d="M17 50V17l5-5h12c10 0 17 6 17 15s-7 15-17 15h-7v8H17Zm10-29v12h7c4.6 0 7-2.1 7-6s-2.4-6-7-6h-7Z"/>
+  <path fill="#e6bb68" d="M34 12c10 0 17 6 17 15H41c0-3.9-2.4-6-7-6v-9Z"/>
+  <path fill="#b7cf98" d="m17 50 10-10v10H17Z"/></svg><span>PESOBASE<small>PERSONAL FINANCE, REFINED.</small></span></div>
     <h1 class="auth-title" id="authTitle">Log in</h1>
     <p class="auth-copy">Your plans, balances, and everyday progress. All in one place. Sign in to sync across your devices.</p>
     <div class="auth-error" id="authError"></div>
@@ -94,7 +97,10 @@ body{letter-spacing:-.015em}button,a,input,select,textarea{-webkit-tap-highlight
   </div>
 </div></div>
 <div class="app hidden" id="appShell">
-<aside class="sidebar"><div class="brand"><div class="brand-lockup"><svg class="pb-symbol" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="currentColor"/><path fill="var(--logo-ink,#dbe9bd)" fill-rule="evenodd" d="M19 48V18a2 2 0 0 1 2-2h12c9 0 14 4 14 11s-5 11-14 11h-6v10h-8Zm8-25v8h6c4 0 6-1.4 6-4s-2-4-6-4h-6Z"/></svg><b>PESOBASE</b></div><small>Your money. Your possibilities.</small></div><nav class="nav" id="sideNav"></nav><div class="side-bottom">Local-first personal finance app<br>PHP · ₱ · exact centavo math</div></aside>
+<aside class="sidebar"><div class="brand"><div class="brand-lockup"><svg class="pb-symbol" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#0f5b43"/>
+  <path fill="#f5f2d9" fill-rule="evenodd" d="M17 50V17l5-5h12c10 0 17 6 17 15s-7 15-17 15h-7v8H17Zm10-29v12h7c4.6 0 7-2.1 7-6s-2.4-6-7-6h-7Z"/>
+  <path fill="#e6bb68" d="M34 12c10 0 17 6 17 15H41c0-3.9-2.4-6-7-6v-9Z"/>
+  <path fill="#b7cf98" d="m17 50 10-10v10H17Z"/></svg><b>PESOBASE</b></div><small>Your money. Your possibilities.</small></div><nav class="nav" id="sideNav"></nav><div class="side-bottom">Local-first personal finance app<br>PHP · ₱ · exact centavo math</div></aside>
 <main class="main">
   <div class="topbar"><div class="search"><input id="globalSearch" placeholder="Search transactions, merchants, categories, accounts..."/></div><div class="top-actions"><button class="appearance-button" onclick="openAppearance()" aria-label="Customize appearance" title="Appearance">◐</button><button class="command-button" onclick="openCommandMenu()" title="Quick actions (Ctrl or Command + K)">⌘ <span>Quick actions</span></button><button aria-label="Previous month" onclick="prevMonth()">←</button><select id="monthPicker" class="month-select"></select><button aria-label="Next month" onclick="nextMonth()">→</button><div class="sync-status" id="syncStatus"><span class="sync-dot" id="syncDot"></span><span id="syncText">Offline</span></div><div class="account-menu" id="accountMenu"><button class="profile" onclick="toggleAccountMenu()" id="profileBtn">P</button><div class="menu"><div class="small muted" id="authEmailLabel" style="padding:7px 10px"></div><button onclick="manualSync()">Sync now</button><button onclick="logout()">Log out</button></div></div></div></div>
 
