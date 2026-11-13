@@ -10,9 +10,42 @@
   "theme_color": "#0f5b43",
   "lang": "en-PH",
   "icons": [
-    {"src":"icons/pesobase-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
-    {"src":"icons/pesobase-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
-    {"src":"icons/pesobase-maskable.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
+    {
+      "src": "icons/pesobase-p-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/pesobase-p-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/pesobase-p-1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/pesobase-p-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ],
-  "shortcuts": [{"name":"Add expense","short_name":"Add expense","url":"./?action=expense","icons":[{"src":"icons/pesobase-192.png","sizes":"192x192"}]}]
+  "shortcuts": [
+    {
+      "name": "Add expense",
+      "short_name": "Add expense",
+      "url": "./?action=expense",
+      "icons": [
+        {
+          "src": "icons/pesobase-p-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
 }

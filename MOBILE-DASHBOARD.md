@@ -51,3 +51,7 @@ Publish the entire static app directory: `index.html`, all `assistant*`, `worksp
 Bump the service-worker cache version in `sw.js` whenever publishing changed shell assets in a later release. The worker caches only explicitly listed static files. API responses, authentication, AI requests, receipts and other origins are not cached by it; finance data remains in the existing per-device/per-account storage.
 
 Run `npm ci --prefix tests && npm test --prefix tests`. This release passes 143 automated checks. Browser QA covered 390-pixel and 320-pixel phone layouts, focused transaction search and details, wallet customization/actions, stacked and grid cards, collapse controls, and compact movable chat. Live provider calls, private account sync, physical camera capture and phone installation were not exercised by these tests.
+
+## Brand artwork
+
+The website, SVG favicon and installation icons share the solid P path in `icons/pesobase.svg`. The PNG icons are rendered from that vector at 180, 192, 512 and 1024 pixels, with a separate maskable version. `scripts/render-icons.cjs` regenerates them and both inline website marks; it requires Node.js and `sharp`. The new icon filenames and shell cache version allow updated artwork to replace previously cached assets. Installed home-screen icons may refresh later than the web interface, depending on the operating system.
