@@ -45,3 +45,7 @@ Ask for summaries, balances, upcoming bills, or drafts to create/edit transactio
 Keys and chats stay in sessionStorage for the current tab/user and are excluded from finance backups. Disconnect or sign out to clear the key. Live chat shares the stated scoped finance context; recording transcription shares the audio without finance records. Provider data terms apply. Gemini requests use stateless mode where supported.
 
 Automated checks use the shipped code and real form handlers with mocked providers, cloud responses and microphone APIs. Real-key availability and physical microphone transcription still need verification in your browser. Final visual browser QA was blocked by the session's automatic approval review usage limit.
+
+## Money Studio integration
+
+AI commands and batch amounts use PHP reporting values. A foreign-currency wallet converts the value using its saved rate, retains the exact PHP amount and marks the native amount as a conversion. Reviewed transaction drafts show the native amount and PHP equivalent. Change the original amount/rate in the transaction form when the bank supplied an exact foreign-currency charge. New uncategorized entries use matching categorization rules. AI batches are attributed in change history; a restore point is kept before financial changes.

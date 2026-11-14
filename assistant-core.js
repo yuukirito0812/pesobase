@@ -1,6 +1,7 @@
 /* Deterministic finance facts, validated drafts, and atomic expense batches. */
-(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.PesoAssistantCore=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
+(function(root,factory){const api=factory(root);if(typeof module==='object'&&module.exports)module.exports=api;else root.PesoAssistantCore=api;})(typeof globalThis!=='undefined'?globalThis:this,function(root){
  'use strict';
+ const pro=typeof module==='object'&&module.exports?require('./pro-core.js'):null,finance=()=>root.PesoProCore||pro;
  const KINDS=['Expense','Income','Transfer','Refund','Savings Contribution','Emergency Fund Contribution','Allowance Payment','Bill Payment','Adjustment','Fund Withdrawal'];
  const TYPES=['transaction','wallet','category','fund','bill','budget','debt','payment','transactionType'];
  const text=(v,max=120)=>String(v??'').slice(0,max);
@@ -8,16 +9,16 @@
  const money=v=>new Intl.NumberFormat('en-PH',{style:'currency',currency:'PHP'}).format(amount(v)/100);
  function canonical(s,label){const seen=new Set();while(s.typeAliases?.[label]&&!seen.has(label)){seen.add(label);label=s.typeAliases[label];}return label||'Expense';}
  const expense=(s,t)=>['Expense','Bill Payment','Allowance Payment'].includes(canonical(s,t.typeLabel))?amount(t.amount):canonical(s,t.typeLabel)==='Refund'?-amount(t.amount):0;
- function walletBalance(s,a){return amount(a.openingBalance)+(s.transactions||[]).reduce((sum,t)=>{const k=canonical(s,t.typeLabel),v=amount(t.amount);return sum+(t.account===a.name?(['Income','Refund','Adjustment','Fund Withdrawal'].includes(k)?v:-v):0)+(k==='Transfer'&&t.destinationAccount===a.name?v:0);},0);}
+ function walletBalance(s,a){if(finance())return finance().balance(s,a);return amount(a.openingBalance)+(s.transactions||[]).reduce((sum,t)=>{const k=canonical(s,t.typeLabel),v=amount(t.amount);return sum+(t.account===a.name?(['Income','Refund','Adjustment','Fund Withdrawal'].includes(k)?v:-v):0)+(k==='Transfer'&&t.destinationAccount===a.name?v:0);},0);}
  function fundBalance(s,f){return (s.transactions||[]).filter(t=>t.fundId===f.id).reduce((sum,t)=>{const k=canonical(s,t.typeLabel);return sum+(['Savings Contribution','Emergency Fund Contribution'].includes(k)?amount(t.amount):k==='Fund Withdrawal'?-amount(t.amount):0);},0);}
  function validDate(value){return typeof value==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(value)&&Number(value.slice(0,4))>=1900&&Number(value.slice(0,4))<=2200&&!Number.isNaN(Date.parse(value))&&new Date(value+'T12:00:00Z').toISOString().slice(0,10)===value;}
  function redact(value){return text(value,8000).replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi,'[email removed]').replace(/(?:\+?\d[\d ()-]{8,}\d)/g,'[number removed]');}
  function buildContext(s,opt={}){
   const today=opt.today||new Date().toISOString().slice(0,10),month=opt.month||s.selectedMonth||today.slice(0,7),focus=(s.accounts||[]).find(a=>a.id===opt.focus),all=s.transactions||[];
   const relevant=all.filter(t=>(!focus||t.account===focus.name||t.destinationAccount===focus.name)&&(opt.day?t.date===opt.day:opt.start?t.date>=opt.start&&t.date<=opt.end:month==='all'||t.date?.startsWith(month)));
-  const categoryTotals=new Map();for(const t of relevant){const n=expense(s,t);if(n)categoryTotals.set(t.category||'Uncategorized',(categoryTotals.get(t.category||'Uncategorized')||0)+n);}
+  const categoryTotals=new Map();for(const t of relevant){const n=expense(s,t);if(n)for(const part of t.categorySplits?.length?t.categorySplits:[{category:t.category||'Uncategorized',amount:Math.abs(n)}])categoryTotals.set(part.category,(categoryTotals.get(part.category)||0)+Math.sign(n)*part.amount);}
   const accountByName=new Map((s.accounts||[]).map(a=>[a.name,a.id]));
-  const accounts=(s.accounts||[]).map(a=>({id:text(a.id),name:redact(a.name),kind:text(a.kind,30),balanceCentavos:walletBalance(s,a),archived:!!a.archived}));
+  const accounts=(s.accounts||[]).map(a=>({id:text(a.id),name:redact(a.name),kind:text(a.kind,30),currency:a.currency||'PHP',balanceCentavos:walletBalance(s,a),archived:!!a.archived}));
   const funds=(s.funds||[]).map(f=>({id:text(f.id),name:redact(f.name),kind:text(f.type,25),balanceCentavos:fundBalance(s,f),targetCentavos:amount(f.target),monthlyCentavos:amount(f.monthly),archived:!!f.archived}));
   const income=relevant.filter(t=>canonical(s,t.typeLabel)==='Income').reduce((n,t)=>n+amount(t.amount),0),spending=relevant.reduce((n,t)=>n+expense(s,t),0);
   const recent=relevant.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))||(b.createdAt||0)-(a.createdAt||0));

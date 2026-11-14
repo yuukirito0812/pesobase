@@ -3,6 +3,8 @@
   'use strict';
   const $=id=>document.getElementById(id),escText=esc;
   const paths={
+    scan:'M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5M7 7h10v10H7zM1 12h22',
+    filter:'M3 4h18l-7 8v7l-4 2V12L3 4',
     search:'m21 21-4.5-4.5M19 10.5a8.5 8.5 0 1 1-17 0 8.5 8.5 0 0 1 17 0',
     close:'m6 6 12 12M6 18 18 6',plus:'M12 5v14M5 12h14',
     up:'m6 14 6-6 6 6',down:'m6 10 6 6 6-6',left:'m14 6-6 6 6 6',right:'m10 6 6 6-6 6',
@@ -33,7 +35,7 @@
   // Searches only transaction records. Amount tokens match exact pesos, not arbitrary digits in notes.
   function matches(t,query){
     const tokens=String(query||'').toLowerCase().match(/"[^"]+"|\S+/g)||[];
-    const text=[t.description,t.merchant,t.category,t.account,t.destinationAccount,t.paymentMethod,t.typeLabel].join(' ').toLocaleLowerCase();
+    const text=[t.description,t.merchant,t.category,...(t.categorySplits||[]).map(x=>x.category),t.account,t.destinationAccount,t.paymentMethod,t.typeLabel].join(' ').toLocaleLowerCase();
     return tokens.every(raw=>{const token=raw.replace(/^"|"$/g,'');
       if(/^\d{4}-\d{2}(?:-\d{2})?$/.test(token))return String(t.date||'').startsWith(token);
       if(/^(?:₱|php)?[\d,]+(?:\.\d{1,2})?$/.test(token)){const n=Number(token.replace(/₱|php|,/g,''));return Number.isFinite(n)&&Math.abs(t.amount)===Math.round(n*100);}

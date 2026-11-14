@@ -1,0 +1,8 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+qa-mobile.html
+dist/qa-mobile.html
+*.traineddata

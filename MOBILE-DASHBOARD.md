@@ -10,7 +10,7 @@
 
 Device mode stays on that device and does not upload. Sync requires the app to be open; this release does not promise uploads while the browser is closed. First-time sign-in and live AI require internet. Built-in summaries, supported expense commands and normal finance entry remain available offline. Speech dictation availability depends on the browser and may require a connection.
 
-Offline account access uses a previously verified identity and that account's saved cache. Network reads and writes still require a valid Supabase session and RLS. Signing out stops automatic account reopening. Browser caches are not encrypted; use a trusted device. Clearing browser storage removes device records and offline access, so keep JSON backups.
+Offline account access uses a previously verified identity and that account's saved cache. Network reads and writes still require a valid Supabase session and RLS. Signing out stops automatic account reopening. Enable PIN-encrypted local storage under Money Studio → Security. The lock is per device and separate from account sign-in. Clearing browser storage removes device records and offline access, so keep JSON backups.
 
 When **Update ready** appears, finish or close any open form and tap it. PESOBASE persists the workspace before activating the downloaded update. Updates do not silently reload an open form.
 
@@ -18,7 +18,7 @@ When **Update ready** appears, finish or close any open form and tap it. PESOBAS
 
 Use **Take photo** or **Choose image** in a transaction form. JPEG, PNG and WebP inputs up to 12 MB are supported. Photos are resized to a maximum 1,600-pixel edge and compressed to roughly 180 KB or less before storage. If processing or storage fails, the form explains the problem and keeps your typed details.
 
-Review the preview, enter the amount/category/details and save. This is a photo attachment feature, not OCR. Open transaction details to view/download the photo; edit the transaction to replace or remove it. Attachments stay with cloud state, offline copies, JSON backups and recoverable deleted transactions. Large collections can reach browser storage limits; an explicit storage warning tells you when a backup is needed.
+Review the preview, enter the amount/category/details and save. Use Read receipt details or Money Studio → Scan receipt for on-device OCR, then check the suggested fields. Open transaction details to view/download the photo; edit the transaction to replace or remove it. Attachments stay with cloud state, offline copies, JSON backups and recoverable deleted transactions. Large collections can reach browser storage limits; an explicit storage warning tells you when a backup is needed.
 
 ## Make the dashboard yours
 

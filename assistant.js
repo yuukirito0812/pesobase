@@ -42,7 +42,7 @@
  }
  function setOpen(value,shouldFocus=true){opened=!!value;if(opened)unread=0;el('pesoAssistant').hidden=!opened;el('assistantLauncher').hidden=opened;document.body.classList.toggle('assistant-open',opened&&!root.hidden);el('appShell').inert=false;el('pesoAssistant').setAttribute('role','dialog');el('pesoAssistant').removeAttribute('aria-modal');if(!opened){voiceController?.cancel();el('assistantContext').hidden=true;el('assistantOptionsToggle').setAttribute('aria-expanded','false');}layoutChat();if(shouldFocus){(opened?(window.innerWidth<=760?el('pesoAssistant'):el('assistantInput')):el('assistantLauncher')).focus({preventScroll:true});}updateBadge();}
  const positionKey='pesobase-chat-position-v1';let bubblePosition=null,panelPosition=null,dragState=null,ignoreClickUntil=0;
- try{const saved=JSON.parse(localStorage.getItem(positionKey)||'null');if(saved&&Number.isFinite(saved.bubble?.x)&&Number.isFinite(saved.bubble?.y))bubblePosition=saved.bubble;if(saved&&Number.isFinite(saved.panel?.x)&&Number.isFinite(saved.panel?.y))panelPosition=saved.panel;}catch{}
+ try{const saved=JSON.parse(PesoStorage.getItem(positionKey)||'null');if(saved&&Number.isFinite(saved.bubble?.x)&&Number.isFinite(saved.bubble?.y))bubblePosition=saved.bubble;if(saved&&Number.isFinite(saved.panel?.x)&&Number.isFinite(saved.panel?.y))panelPosition=saved.panel;}catch{}
  const clamp=(v,min,max)=>Math.min(Math.max(min,max),Math.max(min,v));
  function viewport(){const v=window.visualViewport;return {x:v?.offsetLeft||0,y:v?.offsetTop||0,w:Math.min(v?.width||window.innerWidth,document.documentElement.clientWidth||window.innerWidth),h:v?.height||window.innerHeight};}
  function layoutChat(){
@@ -53,7 +53,7 @@
   const x=clamp(panelPosition?panelPosition.x*(v.w-width):bx+size-width,12,v.w-width-12),y=clamp(panelPosition?panelPosition.y*(v.h-height):by-height-10,12,v.h-height-12);
   dock.style.width=width+'px';dock.style.height=height+'px';dock.style.left=(v.x+x)+'px';dock.style.top=(v.y+y)+'px';dock.style.right='auto';dock.style.bottom='auto';
  }
- function rememberPosition(){try{localStorage.setItem(positionKey,JSON.stringify({bubble:bubblePosition,panel:panelPosition}));}catch{}}
+ function rememberPosition(){try{PesoStorage.setItem(positionKey,JSON.stringify({bubble:bubblePosition,panel:panelPosition}));}catch{}}
  function dragTarget(target,kind){
   target.addEventListener('pointerdown',event=>{if(event.button>0)return;const rect=(kind==='bubble'?target:el('pesoAssistant')).getBoundingClientRect();dragState={kind,target,id:event.pointerId,x:event.clientX,y:event.clientY,left:rect.left,top:rect.top,moved:false};target.setPointerCapture?.(event.pointerId);});
   target.addEventListener('pointermove',event=>{const d=dragState;if(!d||d.target!==target||d.id!==event.pointerId)return;const dx=event.clientX-d.x,dy=event.clientY-d.y;if(!d.moved&&Math.hypot(dx,dy)<6)return;d.moved=true;event.preventDefault();const v=viewport(),box=d.kind==='bubble'?el('assistantLauncher'):el('pesoAssistant'),width=d.kind==='bubble'?56:Math.min(360,v.w-24),height=d.kind==='bubble'?56:Math.min(460,Math.max(190,v.h*.6),v.h-24);const x=clamp(d.left+dx-v.x,10,v.w-width-10),y=clamp(d.top+dy-v.y,10,v.h-height-10),next={x:x/Math.max(1,v.w-width),y:y/Math.max(1,v.h-height)};if(d.kind==='bubble'){bubblePosition=next;panelPosition=null;}else panelPosition=next;box.classList.add('is-dragging');layoutChat();});
@@ -129,7 +129,7 @@
    else if(a.type==='payment'){openPaymentEditor(a.operation==='edit'?state.paymentMethods.indexOf(a.id):null);form=el('payForm');values={name:a.name};}
    else if(a.type==='transactionType'){openTypeEditor(a.operation==='edit'?state.transactionTypes.indexOf(a.id):null);form=el('typeForm');values={name:a.name,behavior:a.kind};}
    if(!form)throw Error('Open this item from its page to finish editing.');
-   fill(form,values);const note=document.createElement('div');note.className='hint assistant-review-note';note.textContent='Assistant draft — check every detail, then save. Nothing has been changed yet.';form.prepend(note);markAfterSave(stored,form);
+   fill(form,values);if(a.type==='transaction'&&a.amountCentavos!==undefined)window.PesoPro?.fillBaseDraft(form,a.amountCentavos);if(a.type==='wallet'&&a.openingBalanceCentavos!==undefined&&form.elements.currency?.value!=='PHP'){const c=form.elements.currency.value;form.elements.opening.value=PesoProCore.decimal(PesoProCore.fromPHP(a.openingBalanceCentavos,c,form.elements.walletRate.value),c);}const note=document.createElement('div');note.className='hint assistant-review-note';note.textContent='Assistant draft — check every detail, then save. Nothing has been changed yet.';form.prepend(note);if(window.PesoPro&&form.onsubmit){const submit=form.onsubmit;form.onsubmit=function(event){return PesoPro.withSource('AI reviewed action',()=>submit.call(this,event));};}markAfterSave(stored,form);
   }catch(error){stored.error=error.message;paint();notify(error.message);}
  }
  function isNewExpense(a){return a.type==='transaction'&&a.operation==='create'&&a.kind==='Expense'&&!a.fundId&&!a.destinationId;}
@@ -144,7 +144,7 @@
   state.transactions.push(...records);actions.forEach((a,i)=>{a.reviewed=true;a.recordId=records[i].id;a.error='';});
   message.batches=message.batches||[];message.batches.push({id:batchId,ids:records.map(r=>r.id),snapshots:records.map(r=>JSON.stringify(r)),undone:false});message.batchError='';
   if(automatic)message.text='Added '+records.length+' expense'+(records.length===1?'':'s')+' totaling '+C.money(plan.total)+'. Your balances and reports are updated.';
-  save();persist();renderAll();paint();const savedBatchIndex=message.batches.length-1;notify('Added '+records.length+' expense'+(records.length===1?'':'s')+' · '+C.money(plan.total),{label:'Undo',run:()=>undoExpenseBatch(message,savedBatchIndex)});return records;
+  save();message.batches.at(-1).snapshots=records.map(r=>JSON.stringify(r));persist();renderAll();paint();const savedBatchIndex=message.batches.length-1;notify('Added '+records.length+' expense'+(records.length===1?'':'s')+' · '+C.money(plan.total),{label:'Undo',run:()=>undoExpenseBatch(message,savedBatchIndex)});return records;
  }
  function undoExpenseBatch(message,index){
   const batch=message?.batches?.[index];if(!batch||batch.undone)return;const records=batch.ids.map(id=>state.transactions.find(t=>t.id===id));
